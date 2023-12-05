@@ -1,5 +1,5 @@
-% NAME, GROUP (EE4/MSc), 2010, Imperial College.
-% DATE
+% Haoxiang Huang, CSP(EE4/MSc), 2023, Imperial College.
+% 05-Dec-2023
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Takes polynomial weights and produces an M-Sequence
@@ -13,3 +13,25 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 function [MSeq]=fMSeqGen(coeffs)
+    % the length of shift register
+    m = length(coeffs) - 1; 
+
+    % Initialize 
+    reg = ones(m, 1); 
+    N_c = 2.^m - 1; % maximum period of the shift register
+    MSeq = zeros(N_c, 1); 
+
+    % Generate the M-sequence
+    for i = 1:N_c
+        % XOR
+        feedback = mod(sum(reg .* coeffs(2:end)), 2);
+        
+        MSeq(i) = reg(end);
+
+        % Shift the register
+        reg = circshift(reg, 1);
+
+        % Place the feedback result in the first position of the register
+        reg(1) = feedback;
+    end
+end
