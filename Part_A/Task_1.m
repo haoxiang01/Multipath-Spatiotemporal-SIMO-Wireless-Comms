@@ -9,9 +9,9 @@ close all;
 addpath('Wrappers')
 
 %% Initialization and Load transmitted images
-img1_path = 'Photos\photo1.jpg';
-img2_path = 'Photos\photo2.jpg';
-img3_path = 'Photos\photo3.jpg';
+img1_path = 'Photos\photo1.png';
+img2_path = 'Photos\photo2.png';
+img3_path = 'Photos\photo3.png';
 
 disp('Load three Images for three Users');
 Image1 = imread(img1_path);
@@ -36,9 +36,9 @@ Q2 = x2*y2*3*8;
 Q3 = x3*y3*3*8;
 P = max([Q1,Q2,Q3]);
 
-bitstream1 = fImageSource(img1_path,P);
-bitstream2 = fImageSource(img2_path,P);
-bitstream3 = fImageSource(img3_path,P);
+bitstream_img1 = fImageSource(img1_path,P);
+bitstream_img2 = fImageSource(img2_path,P);
+bitstream_img3 = fImageSource(img3_path,P);
 
 %% DSSS-QPSK Modulation
 disp('DSSS-QPSK Modulation');
@@ -85,5 +85,10 @@ Balanced_GoldSeq1 = GoldSeq_buffer(:,delay);
 Balanced_GoldSeq2 = GoldSeq_buffer(:,delay+1);
 Balanced_GoldSeq3 = GoldSeq_buffer(:,delay+2);
 
+%calculate the angle for DS-QPSK modulation
+phi = (X+2*Y) * pi/180;
 
-
+%get the symbols of transmitted three user images
+symbols_img1 = fDSQPSKModulator(bitstream_img1, Balanced_GoldSeq1, phi);
+symbols_img2 = fDSQPSKModulator(bitstream_img2, Balanced_GoldSeq2, phi);
+symbols_img3 = fDSQPSKModulator(bitstream_img3, Balanced_GoldSeq3, phi);
