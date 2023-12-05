@@ -16,28 +16,29 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 function [symbolsOut]=fDSQPSKModulator(bitsIn,goldseq,phi)
-%% QPSK Modulation
-%calculate length of the transmitted symbol squences
-len_symbols = length(bitsIn)/2;
-symbols = zeros(len_symbols);
-
-for index = 1:len_symbols
-    %2 bits per symbols
-    bit_pairs = [num2str(bitsIn(2*index-1)),num2str(bitsIn(2*index))];
-    switch bit_pairs
-        case '00'
-            symbols(index) = sqrt(2)*(cos(phi)+1i*sin(phi));
-        case '01'
-            symbols(index) = sqrt(2)*(cos(phi+pi/2)+1i*sin(phi+pi/2));
-        case '11'
-            symbols(index) = sqrt(2)*(cos(phi+pi)+1i*sin(phi+pi));
-        case '10'
-            symbols(index) = sqrt(2)*(cos(phi+3*pi/2)+1i*sin(phi+3*pi/2));
+    %% QPSK Modulation
+    %calculate length of the transmitted symbol squences
+    len_symbols = length(bitsIn)/2;
+    symbols = zeros(len_symbols,1);
+    
+    for index = 1:len_symbols
+        %2 bits per symbols
+        bit_pairs = [num2str(bitsIn(2*index-1)),num2str(bitsIn(2*index))];
+        switch bit_pairs
+            case '00'
+                symbols(index) = sqrt(2)*(cos(phi)+1i*sin(phi));
+            case '01'
+                symbols(index) = sqrt(2)*(cos(phi+pi/2)+1i*sin(phi+pi/2));
+            case '11'
+                symbols(index) = sqrt(2)*(cos(phi+pi)+1i*sin(phi+pi));
+            case '10'
+                symbols(index) = sqrt(2)*(cos(phi+3*pi/2)+1i*sin(phi+3*pi/2));
+        end
     end
+    
+    %% DSSS
+    % convert Gold Sequence from 0/1 to 1/-1
+    goldseq_trans= 1-2*goldseq;
+    symbolsOut = goldseq_trans * symbols.';
+    symbolsOut = symbolsOut(:);
 end
-
-%% DSSS
-% convert Gold Sequence from 0/1 to 1/-1
-goldseq_trans= 1-2*goldseq;
-symbolsOut = goldseq * symbols;
-symbolsOut = symbolsOut(:);
