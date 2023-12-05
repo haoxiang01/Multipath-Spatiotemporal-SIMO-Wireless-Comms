@@ -1,5 +1,5 @@
-% NAME, GROUP (EE4/MSc), 2010, Imperial College.
-% DATE
+% Haoxiang Huang, CSP (MSc), 2023, Imperial College.
+% 05-Dec-2023
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Reads an image file with AxB pixels and produces a column vector of bits
