@@ -1,5 +1,5 @@
-% NAME, GROUP (EE4/MSc), 2010, Imperial College.
-% DATE
+% Haoxiang Huang, CSP (MSc), 2023, Imperial College.
+% 05-Dec-2023
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Takes two M-Sequences of the same length and produces a gold sequence by
@@ -15,3 +15,14 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 function [GoldSeq]=fGoldSeq(mseq1,mseq2,shift)
+    % ensure the input two m sequences have the same length
+    if length(mseq1) ~= length(mseq2)
+        error('M-sequences must be of the same length');
+    end
+
+    % Shift the second M-sequence
+    shifted_mseq2 = circshift(mseq2, shift);
+
+    % Perform modulo-2 addition (XOR)
+    GoldSeq = mod(mseq1 + shifted_mseq2, 2);
+end
