@@ -19,3 +19,27 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 function [bitsOut,x,y]=fImageSource(filename,P)
+    % Read the image
+    img = imread(filename);
+
+    [x, y, ~] = size(img);
+
+    % Calculate the number of bits Q
+    Q = x * y * 3 * 8;
+
+    % Reshape and convert the image to a binary vector
+    imgReshaped = reshape(img, [], 1);
+    imgBinary = de2bi(imgReshaped, 8, 'left-msb');
+    imgBits = reshape(imgBinary', [], 1);
+
+    
+    if P >= Q
+        imgBits = [imgBits; zeros(P-Q, 1)];% Pad with zeros if necessary
+    else
+        error('P must be greater than or equal to Q = AxBx3x8');
+    end
+
+    % Output the bitstream
+    bitsOut = imgBits;
+end
+
