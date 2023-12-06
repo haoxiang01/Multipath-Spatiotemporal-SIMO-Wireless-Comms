@@ -127,7 +127,7 @@ Rx_bitstreams = fDSQPSKDemodulator(Rx_symbols,Balanced_GoldSeq1,phi,delay_estima
 disp(['BER = ',num2str(BER_0db)]);
 figure();
 fImageSink(Rx_bitstreams, Q1,x1,y1);
-title({' Received Desired Image'; ['SNR=',num2str(SNR),'dB ,','BER=',num2str(BER_0db)]});
+title({'Rake Receiver: Desired Received Photo1 '; ['SNR=',num2str(SNR),'dB , ','BER=',num2str(BER_0db)]});
 disp('...................................................');
 fprintf('\n');
 
@@ -161,6 +161,6 @@ Rx_bitstreams = fDSQPSKDemodulator(Rx_symbols,Balanced_GoldSeq1,phi,delay_estima
 disp(['BER = ',num2str(BER_40db)]);
 figure();
 fImageSink(Rx_bitstreams, Q1,x1,y1);
-title({' Received Desired Image'; ['SNR=',num2str(SNR),'dB ,','BER=',num2str(BER_40db)]});
+title({'Rake Receiver: Desired Received Photo1 '; ['SNR=',num2str(SNR),'dB , ','BER=',num2str(BER_40db)]});
 disp('...................................................');
 fprintf('\n');
