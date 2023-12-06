@@ -12,12 +12,7 @@ addpath('Wrappers')
 img1_path = 'Photos\photo1.png';
 img2_path = 'Photos\photo2.png';
 img3_path = 'Photos\photo3.png';
-% img1_path = 'Photos\torres.jpg';
-% img2_path = 'Photos\hazard.jpg';
-% img3_path = 'Photos\lampard.jpg';
-% img1_path = 'Photos\pic1.jpg';
-% img2_path = 'Photos\pic2.jpg';
-% img3_path = 'Photos\pic3.jpg';
+
 
 disp('Load three Images for three Users');
 Image1 = imread(img1_path);
