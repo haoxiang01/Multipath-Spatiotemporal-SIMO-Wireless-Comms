@@ -50,14 +50,15 @@ for i = 1:M
     end
 end
 
-%%Add AWGN
-% desired signal power
+%Add AWGN
+%desired signal power
 Pd_dB = 10*log10(sum(abs((beta(1:paths(1)) .* symbolsIn(1,1))).^2)); 
 
-% noise power
+%noise power
 Pn_dB = Pd_dB - SNR; 
 Pn = 10.^(Pn_dB/10);
 noise = sqrt(Pn/2) * (randn(size(symbolsOut)) + 1i * randn(size(symbolsOut))); % AWGN noise
 symbolsOut = symbolsOut + noise;                                                    % Add noise
 symbolsOut = symbolsOut.';
 end
+

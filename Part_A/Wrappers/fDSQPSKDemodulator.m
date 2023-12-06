@@ -18,7 +18,7 @@
 
 function [bitsOut]=fDSQPSKDemodulator(symbolsIn,GoldSeq,phi,delay,betas)
 GoldSeq = 1-2*GoldSeq;  % Transfer Gold Sequence from 0/1 to 1/-1
-len_goldseq = size(goldseq,1); % Length of the gold sequence
+len_goldseq = size(GoldSeq,1); % Length of the gold sequence
 len_symbolsIn = size(symbolsIn,1); % Length of the symbols with delay
 len_sig = floor(len_symbolsIn/len_goldseq);% Length of the original signal
 len_in = len_goldseq * len_sig ;% Length of symbols without delay
@@ -28,7 +28,7 @@ symbolsDespread = [];
 for i = 1:len_delay
     symbols = [];
     symbols = symbolsIn(delay(:,i)+1:delay(:,i)+len_in);
-    symbols = reshape(symbols,m,n);
+    symbols = reshape(symbols,len_goldseq,len_sig);
     symbolsDespread = [symbolsDespread;GoldSeq' * symbols];
 end
 symbolsDespread = conj(betas.')*symbolsDespread;
@@ -41,7 +41,7 @@ for i = 1:length(symbolsDespread)
     dist(2) = abs(symbolsDespread(i)-sqrt(2)*(cos(phi+pi/2)+1i*sin(phi+pi/2)));        % 01
     dist(3) = abs(symbolsDespread(i)-sqrt(2)*(cos(phi+pi)+1i*sin(phi+pi)));            % 11
     dist(4) = abs(symbolsDespread(i)-sqrt(2)*(cos(phi+3*pi/2)+1i*sin(phi+3*pi/2)));    % 10
-    [~,bit] = mink(distance,1);                                                            % Find the index of minimum distance
+    [~,bit] = mink(dist,1);                                                            % Find the index of minimum distance
     bit_str = num2str(bit);
     switch  bit_str
         case '1'                                                                           % 00
@@ -54,4 +54,5 @@ for i = 1:length(symbolsDespread)
             bitsOut = [bitsOut;1;0];
     end
 end
-end
+% end
+

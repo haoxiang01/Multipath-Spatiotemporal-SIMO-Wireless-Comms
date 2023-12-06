@@ -1,6 +1,5 @@
-% NAME, GROUP (EE4/MSc), 2010, Imperial College.
-% DATE
-
+% Haoxiang Huang, CSP (MSc), 2023, Imperial College.
+% 06-Dec-2023
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Display the received image by converting bits back into R, B and G
 % matrices
@@ -16,3 +15,19 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 function fImageSink(bitsIn,Q,x,y)
+img = zeros(x,y,3);
+bitsIn = bitsIn(1:Q); % remove the padding zero
+conveter = [2^7, 2^6, 2^5, 2^4, 2^3, 2^2, 2, 1];
+Qc = Q/3;
+for num = 1:3
+    bits = bitsIn((num-1)*Qc+1 : num*Qc); % bits of one channel
+    bits = reshape(bits,8,x,y);
+    for i = 1:x
+        for j = 1:y
+            img(i,j,num) = conveter * bits(:,i,j); % convert from binary values to double value
+        end
+    end
+end
+img = uint8(img);
+imshow(img);
+end

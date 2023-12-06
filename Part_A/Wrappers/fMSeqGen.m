@@ -26,12 +26,12 @@ function [MSeq]=fMSeqGen(coeffs)
         % XOR
         feedback = mod(sum(reg .* coeffs(2:end)), 2);
         
-        MSeq(i) = reg(end);
-
+      
         % Shift the register
-        reg = circshift(reg, 1);
+        reg = [feedback; reg(1:end-1)];
 
-        % Place the feedback result in the first position of the register
-        reg(1) = feedback;
+        % Store the last bit of the register into MSeq
+        MSeq(i) = reg(end);
+        
     end
 end

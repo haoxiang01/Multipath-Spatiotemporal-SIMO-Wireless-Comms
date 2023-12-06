@@ -12,6 +12,12 @@ addpath('Wrappers')
 img1_path = 'Photos\photo1.png';
 img2_path = 'Photos\photo2.png';
 img3_path = 'Photos\photo3.png';
+% img1_path = 'Photos\torres.jpg';
+% img2_path = 'Photos\hazard.jpg';
+% img3_path = 'Photos\lampard.jpg';
+% img1_path = 'Photos\pic1.jpg';
+% img2_path = 'Photos\pic2.jpg';
+% img3_path = 'Photos\pic3.jpg';
 
 disp('Load three Images for three Users');
 Image1 = imread(img1_path);
@@ -41,7 +47,8 @@ bitstream_img2 = fImageSource(img2_path,P);
 bitstream_img3 = fImageSource(img3_path,P);
 
 %% DSSS-QPSK Modulation
-disp('DSSS-QPSK Modulation');
+disp('........Initization: 3 Co-channel Transmiter.........');
+disp('Start DSSS-QPSK Modulation');
 X = 8; %alphabetical order of the 1st letter H of my surname Huang.
 Y = 8; %alphabetical order of the 1st letter H of my formal firstname Haoxiang.
 
@@ -92,3 +99,73 @@ phi = (X+2*Y) * pi/180;
 symbols_img1 = fDSQPSKModulator(bitstream_img1, Balanced_GoldSeq1, phi);
 symbols_img2 = fDSQPSKModulator(bitstream_img2, Balanced_GoldSeq2, phi);
 symbols_img3 = fDSQPSKModulator(bitstream_img3, Balanced_GoldSeq3, phi);
+Tx_symbols = [symbols_img1,symbols_img2,symbols_img3];
+disp('...................................................');
+fprintf('\n');
+
+%% Task-1a (SNR = 0 dB)
+disp('..............Task-1a (SNR = 0 dB).................')
+%  Channel Paramater
+delays = [5;7;12];
+betas = [.4 ; .7 ; .2];
+DOAs = [30 0;90 0;150 0];
+paths = [1,1,1];
+array = [0,0,0];
+SNR = 0;
+disp('.............Task-1a Channel Parameters..........');
+disp(['SNR = ',num2str(SNR)]);
+disp(['Delay = ',num2str(delays(1)),',',num2str(delays(2)),',',num2str(delays(3))]);
+disp(['Beta = ',num2str(betas(1)),',',num2str(betas(2)),',',num2str(betas(3))]);
+disp('...................................................');
+disp('Transmit the images through this channel');
+Rx_symbols = fChannel(paths,Tx_symbols,delays,betas,DOAs,SNR,array);
+
+%%  Task-1b RAKE Receiver Design
+fprintf('\n');
+disp('..............Task-1b Rake Receiver................');
+disp('Start Channel Estimation');
+delay_estimate1 = fChannelEstimation(Rx_symbols,Balanced_GoldSeq1,paths(1));
+disp(['The estimated photo-1 transmittion delay is: ',num2str(delay_estimate1)])
+disp('Start DSSS-QPSK Demodulation');
+Rx_bitstreams = fDSQPSKDemodulator(Rx_symbols,Balanced_GoldSeq1,phi,delay_estimate1,betas(1));
+[~,BER_0db] = biterr(Rx_bitstreams, bitstream_img1);
+disp(['BER = ',num2str(BER_0db)]);
+figure();
+fImageSink(Rx_bitstreams, Q1,x1,y1);
+title({' Received Desired Image'; ['SNR=',num2str(SNR),'dB ,','BER=',num2str(BER_0db)]});
+disp('...................................................');
+fprintf('\n');
+
+
+%% Task-1a (SNR = 40 dB)
+disp('..............Task-1a (SNR = 40 dB).................')
+%  Channel Paramater
+delays = [5;7;12];
+betas = [.4 ; .7 ; .2];
+DOAs = [30 0;90 0;150 0];
+paths = [1,1,1];
+array = [0,0,0];
+SNR = 40;
+disp('.............Task-1a Channel Parameters..........');
+disp(['SNR = ',num2str(SNR)]);
+disp(['Delay = ',num2str(delays(1)),',',num2str(delays(2)),',',num2str(delays(3))]);
+disp(['Beta = ',num2str(betas(1)),',',num2str(betas(2)),',',num2str(betas(3))]);
+disp('...................................................');
+disp('Transmit the images through this channel');
+Rx_symbols = fChannel(paths,Tx_symbols,delays,betas,DOAs,SNR,array);
+
+%%  Task-1b RAKE Receiver Design
+fprintf('\n');
+disp('..............Task-1b Rake Receiver................');
+disp('Start Channel Estimation');
+delay_estimate1 = fChannelEstimation(Rx_symbols,Balanced_GoldSeq1,paths(1));
+disp(['The estimated photo-1 transmittion delay is: ',num2str(delay_estimate1)])
+disp('Start DSSS-QPSK Demodulation');
+Rx_bitstreams = fDSQPSKDemodulator(Rx_symbols,Balanced_GoldSeq1,phi,delay_estimate1,betas(1));
+[~,BER_40db] = biterr(Rx_bitstreams, bitstream_img1);
+disp(['BER = ',num2str(BER_40db)]);
+figure();
+fImageSink(Rx_bitstreams, Q1,x1,y1);
+title({' Received Desired Image'; ['SNR=',num2str(SNR),'dB ,','BER=',num2str(BER_40db)]});
+disp('...................................................');
+fprintf('\n');
