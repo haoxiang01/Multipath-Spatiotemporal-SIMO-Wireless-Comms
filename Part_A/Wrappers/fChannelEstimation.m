@@ -37,4 +37,5 @@ for d_i = 1:d_max+1
 end
 [~,delay_estimate] = maxk(powers, pathNum);
 delay_estimate = sort(delay_estimate - 1);
+delay_estimate = delay_estimate.';
 end

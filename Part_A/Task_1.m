@@ -13,7 +13,7 @@ img1_path = 'Photos\photo1.png';
 img2_path = 'Photos\photo2.png';
 img3_path = 'Photos\photo3.png';
 
-
+disp('........Initization: 3 Co-channel Transmiter.........');
 disp('Load three Images for three Users');
 Image1 = imread(img1_path);
 Image2 = imread(img2_path);
@@ -42,7 +42,6 @@ bitstream_img2 = fImageSource(img2_path,P);
 bitstream_img3 = fImageSource(img3_path,P);
 
 %% DSSS-QPSK Modulation
-disp('........Initization: 3 Co-channel Transmiter.........');
 disp('Start DSSS-QPSK Modulation');
 X = 8; %alphabetical order of the 1st letter H of my surname Huang.
 Y = 8; %alphabetical order of the 1st letter H of my formal firstname Haoxiang.
@@ -127,7 +126,7 @@ Rx_bitstreams = fDSQPSKDemodulator(Rx_symbols,Balanced_GoldSeq1,phi,delay_estima
 disp(['BER = ',num2str(BER_0db)]);
 figure();
 fImageSink(Rx_bitstreams, Q1,x1,y1);
-title({'Rake Receiver: Desired Received Photo1 '; ['SNR=',num2str(SNR),'dB , ','BER=',num2str(BER_0db)]});
+title({'Task1';'Rake Receiver: Desired Received Photo1 '; ['SNR=',num2str(SNR),'dB , ','BER=',num2str(BER_0db)]});
 disp('...................................................');
 fprintf('\n');
 
@@ -161,6 +160,6 @@ Rx_bitstreams = fDSQPSKDemodulator(Rx_symbols,Balanced_GoldSeq1,phi,delay_estima
 disp(['BER = ',num2str(BER_40db)]);
 figure();
 fImageSink(Rx_bitstreams, Q1,x1,y1);
-title({'Rake Receiver: Desired Received Photo1 '; ['SNR=',num2str(SNR),'dB , ','BER=',num2str(BER_40db)]});
+title({'Task1';'Rake Receiver: Desired Received Photo1 '; ['SNR=',num2str(SNR),'dB , ','BER=',num2str(BER_40db)]});
 disp('...................................................');
 fprintf('\n');
