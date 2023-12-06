@@ -26,21 +26,23 @@
 function [symbolsOut]=fChannel(paths,symbolsIn,delay,beta,DOA,SNR,array)
 %% Parameters
 num_Tx = size(symbolsIn,2); % number of Tx
+
+
 len_in = size(symbolsIn,1);  % length of the source symbols
 len_out = len_in + max(delay); %length of the received symbols
 
 %use defin in ACT-3 slides p42
 N = size(array,1); % number of antennas
-L = num_Tx;
-M = len_in;
-symbolsOut = zeros(n,len_out);
+L = len_out;
+M = num_Tx;
+symbolsOut = zeros(N,len_out);
 
 paths_index = 1;
 
 for i = 1:M
     for j = 1:paths(i)
         m_t_min_tao = zeros(len_out,1);
-        m_t_min_tao(1+delay(paths_index):L+delay(paths_index)) = symbolsIn(:,i);
+        m_t_min_tao(1+delay(paths_index):len_in+delay(paths_index)) = symbolsIn(:,i);
         amv = spv(array,DOA(paths_index,:));
         x_t = amv * m_t_min_tao.' * beta(i);
         symbolsOut = symbolsOut + x_t;
