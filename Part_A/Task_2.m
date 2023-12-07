@@ -1,7 +1,7 @@
 %...............................................
 % Author: Haoxiang Huang, MSc CSP, IC. 
 % Date: 05-Dec-2023.
-% This is the Task1 design for the ACT CW PartA
+% This is the Task2 design for the ACT CW PartA
 %...............................................
 clc;
 clear all;
