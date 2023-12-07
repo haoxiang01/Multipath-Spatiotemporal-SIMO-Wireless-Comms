@@ -77,7 +77,7 @@ delay=0;
 for index = 1:N_c+2
     if sum(GoldSeq_buffer_trans(:,index)) == -1 && index>= delay_threshold
         delay = index;
-        break
+        break;
     end
 end
 
@@ -98,7 +98,7 @@ disp('...................................................');
 fprintf('\n');
 
 %% Task-1a (SNR = 0 dB)
-disp('..............Task-1a (SNR = 0 dB).................')
+disp('..............Task-1a (SNR = 0 dB).................');
 %  Channel Paramater
 delays = [5;7;12];
 betas = [.4 ; .7 ; .2];
@@ -119,7 +119,7 @@ fprintf('\n');
 disp('..............Task-1b Rake Receiver................');
 disp('Start Channel Estimation');
 delay_estimate1 = fChannelEstimation(Rx_symbols,Balanced_GoldSeq1,paths(1));
-disp(['The estimated photo-1 transmittion delay is: ',num2str(delay_estimate1)])
+disp(['The estimated photo-1 transmittion delay is: ',num2str(delay_estimate1)]);
 disp('Start DSSS-QPSK Demodulation');
 Rx_bitstreams = fDSQPSKDemodulator(Rx_symbols,Balanced_GoldSeq1,phi,delay_estimate1,betas(1));
 [~,BER_0db] = biterr(Rx_bitstreams, bitstream_img1);
@@ -132,7 +132,7 @@ fprintf('\n');
 
 
 %% Task-1a (SNR = 40 dB)
-disp('..............Task-1a (SNR = 40 dB).................')
+disp('..............Task-1a (SNR = 40 dB).................');
 %  Channel Paramater
 delays = [5;7;12];
 betas = [.4 ; .7 ; .2];
@@ -153,7 +153,7 @@ fprintf('\n');
 disp('..............Task-1b Rake Receiver................');
 disp('Start Channel Estimation');
 delay_estimate1 = fChannelEstimation(Rx_symbols,Balanced_GoldSeq1,paths(1));
-disp(['The estimated photo-1 transmittion delay is: ',num2str(delay_estimate1)])
+disp(['The estimated photo-1 transmittion delay is: ',num2str(delay_estimate1)]);
 disp('Start DSSS-QPSK Demodulation');
 Rx_bitstreams = fDSQPSKDemodulator(Rx_symbols,Balanced_GoldSeq1,phi,delay_estimate1,betas(1));
 [~,BER_40db] = biterr(Rx_bitstreams, bitstream_img1);

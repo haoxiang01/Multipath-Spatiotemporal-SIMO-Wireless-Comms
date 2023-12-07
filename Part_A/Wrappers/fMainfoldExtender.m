@@ -20,6 +20,7 @@ function [x_n] = fMainfoldExtender(symbolsIn,N_c)
     N = size(symbolsIn, 1);
     M = size(symbolsIn, 2); % length of symbols
     numBlocks = floor(M / N_c);  % Calculate the number of blocks (L)
+    numBlocks = max(1,numBlocks);
     
     for j = 1:numBlocks
         start_ = 1 + (j - 1) * N_c;
@@ -38,4 +39,3 @@ function [x_n] = fMainfoldExtender(symbolsIn,N_c)
         x_n  = [x_n temp];
     end
 end
-
