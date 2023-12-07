@@ -17,7 +17,7 @@ function [Cost] = fMuSIC(Rxx,c,M,N_c,arrays,J)
         end
     end
     Cost= -10*log10(Cost);
-    figure(3);
+    figure();
     mesh(0:N_c-1,0:180,real(Cost));    % Plot the cost function;
     title('STAR MuSIC Spectrum');
     xlabel('Delay');

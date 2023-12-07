@@ -14,6 +14,7 @@ img1_path = 'Photos\photo1.png';
 img2_path = 'Photos\photo2.png';
 img3_path = 'Photos\photo3.png';
 
+
 disp('........Initization: 3 Co-channel Transmiter.........');
 disp('Load three Images for three Users');
 Image1 = imread(img1_path);
@@ -96,16 +97,17 @@ symbols_img2 = fDSQPSKModulator(bitstream_img2, Balanced_GoldSeq2, phi);
 symbols_img3 = fDSQPSKModulator(bitstream_img3, Balanced_GoldSeq3, phi);
 Tx_symbols = [symbols_img1,symbols_img2,symbols_img3];
 disp('...................................................');
-fprintf('\n');
-disp('..............Task-3 (SNR = 0 dB).................')
 
+%% Task3(0dB)
+fprintf('\n');
+disp('..............Task-3 (SNR = 40 dB).................')
 %  Channel Paramater
 delays = [5;7;12];
 betas = [.4 ; .7 ; .2];
 DOAs = [30 0;90 0;150 0];
 paths = [1,1,1];
 %array = [0,0,0];
-SNR = 40;
+SNR = 0;
 disp('.............Task-3 Channel Parameters..........');
 disp(['SNR = ',num2str(SNR)]);
 disp(['Delay = ',num2str(delays(1)),',',num2str(delays(2)),',',num2str(delays(3))]);
@@ -113,7 +115,7 @@ disp(['Beta = ',num2str(betas(1)),',',num2str(betas(2)),',',num2str(betas(3))]);
 disp('...................................................');
 
 
-%% Task3
+
 %% Define Uniform Circular Array (UCA)
 fprintf('\n')
 disp('.............Task3 UCA Receiver................');
@@ -164,3 +166,16 @@ disp(['The estimated delays are : ',num2str(delay_estimate)]);
 disp(['The estimated DOAs are : ',num2str(reshape(DOA_estimate',1,numel(DOA_estimate)))]);
 
 %% STAR Beamformer
+disp('Start STAR Beamformer');
+y_n = fSTARBeamformer(x_n,cartesianArray,Balanced_GoldSeq1,delay_estimate,DOA_estimate,betas(1:paths(1)));
+
+disp('Start DSSS-QPSK Demodulation');
+
+Rx_bitstreams = fDSQPSKDemodulator(y_n.',Balanced_GoldSeq1,phi);
+[~,BER_40db] = biterr(Rx_bitstreams, bitstream_img1);
+disp(['BER = ',num2str(BER_40db)]);
+figure();
+fImageSink(Rx_bitstreams, Q1,x1,y1);
+title({'Task3';'STAR Receiver: Desired Received Photo1 '; ['SNR=',num2str(SNR),'dB , ','BER=',num2str(BER_40db)]});
+disp('...................................................');
+fprintf('\n');
