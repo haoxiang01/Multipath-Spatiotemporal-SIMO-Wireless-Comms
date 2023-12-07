@@ -97,7 +97,7 @@ symbols_img3 = fDSQPSKModulator(bitstream_img3, Balanced_GoldSeq3, phi);
 Tx_symbols = [symbols_img1,symbols_img2,symbols_img3];
 disp('...................................................');
 fprintf('\n');
-disp('..............Task-1a (SNR = 0 dB).................')
+disp('..............Task-3 (SNR = 0 dB).................')
 
 %  Channel Paramater
 delays = [5;7;12];
@@ -105,8 +105,8 @@ betas = [.4 ; .7 ; .2];
 DOAs = [30 0;90 0;150 0];
 paths = [1,1,1];
 %array = [0,0,0];
-SNR = 0;
-disp('.............Task-1a Channel Parameters..........');
+SNR = 40;
+disp('.............Task-3 Channel Parameters..........');
 disp(['SNR = ',num2str(SNR)]);
 disp(['Delay = ',num2str(delays(1)),',',num2str(delays(2)),',',num2str(delays(3))]);
 disp(['Beta = ',num2str(betas(1)),',',num2str(betas(2)),',',num2str(betas(3))]);
@@ -132,7 +132,7 @@ plot(cartesianArray(:, 1), cartesianArray(:, 2), 'xr', ...
 hold on;
 plot(0, 0, '+k', 'MarkerSize', 10, 'LineWidth', 2);
 for i = 1:size(cartesianArray, 1)
-    plot([0, cartesianArray(i, 1)], [0, cartesianArray(i, 2)], '--k'); % 画虚线
+    plot([0, cartesianArray(i, 1)], [0, cartesianArray(i, 2)], '--k'); 
 end
 angleText = sprintf('%.2f°', rad2deg(2*pi/5));
 text(0, 0, angleText, 'VerticalAlignment', 'bottom', 'HorizontalAlignment', 'right');
@@ -153,6 +153,14 @@ Rx_symbols = fChannel(paths,Tx_symbols,delays,betas,DOAs,SNR,cartesianArray);
 %% Discretiser and Manifold Extender
 disp('Start Discretiser and Manifold Extender');
 N = 5; % Num of Antennas
-N_ext = 2*N_c;
-x_n = fMainfoldExtender(symbolsOut, N_c);
+N_ext = 2*N_c;% Extended Length
+%Extended Signal
+x_n = fMainfoldExtender(Rx_symbols, N_c);
 
+%% STAR Channel Estimation
+disp('Start STAR Channel Estimation');
+[delay_estimate,DOA_estimate] = fChannelEstimation(x_n,Balanced_GoldSeq1,paths(1),cartesianArray);
+disp(['The estimated delays are : ',num2str(delay_estimate)]);
+disp(['The estimated DOAs are : ',num2str(reshape(DOA_estimate',1,numel(DOA_estimate)))]);
+
+%% STAR Beamformer
