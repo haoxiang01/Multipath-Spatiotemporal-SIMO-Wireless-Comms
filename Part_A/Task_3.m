@@ -118,7 +118,7 @@ disp('...................................................');
 
 %% Define Uniform Circular Array (UCA)
 fprintf('\n')
-disp('.............Task3 UCA Receiver................');
+disp('.............Task3 UCA STAR Receiver................');
 disp('Deploy Uniform Circular Array (UCA)')
 %the differece of each angle
 delta_angle = 2*pi/5;
@@ -162,8 +162,8 @@ x_n = fMainfoldExtender(Rx_symbols, N_c);
 %% STAR Channel Estimation
 disp('Start STAR Channel Estimation');
 [delay_estimate,DOA_estimate] = fChannelEstimation(x_n,Balanced_GoldSeq1,paths(1),cartesianArray);
-disp(['The estimated delays are : ',num2str(delay_estimate)]);
-disp(['The estimated DOAs are : ',num2str(reshape(DOA_estimate',1,numel(DOA_estimate)))]);
+disp(['The estimated Photo-1 delay are : ',num2str(delay_estimate)]);
+disp(['The estimated Photo-1 DOAs (theta, phi) are : ',num2str(reshape(DOA_estimate',1,numel(DOA_estimate)))]);
 
 %% STAR Beamformer
 disp('Start STAR Beamformer');
@@ -176,6 +176,6 @@ Rx_bitstreams = fDSQPSKDemodulator(y_n.',Balanced_GoldSeq1,phi);
 disp(['BER = ',num2str(BER_40db)]);
 figure();
 fImageSink(Rx_bitstreams, Q1,x1,y1);
-title({'Task3';'STAR Receiver: Desired Received Photo1 '; ['SNR=',num2str(SNR),'dB , ','BER=',num2str(BER_40db)]});
+title({'Task3';'STAR Receiver: Desired Received Photo1 '; ['SNR=',num2str(SNR),' dB , ','BER=',num2str(BER_40db)]});
 disp('...................................................');
 fprintf('\n');
