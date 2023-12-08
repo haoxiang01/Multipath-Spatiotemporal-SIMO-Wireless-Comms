@@ -21,7 +21,6 @@ GoldSeq1 = fGoldSeq(mSeq1,mSeq2,phase_shift);
 
 %%Task4
 %% Define Uniform Circular Array (UCA)
-fprintf('\n')
 disp('..........Task4 UCA STAR Receiver with Personal data.............');
 disp('Deploy Uniform Circular Array (UCA)')
 %the differece of each angle
@@ -76,7 +75,7 @@ disp('Start DSSS-QPSK Demodulation');
 Rx_bitstreams = fDSQPSKDemodulator(y_n.',GoldSeq1,phi_mod);
 
 %%  Print the text
-Convert the bitstream to binary numbers
+%Convert the bitstream to binary numbers
 nBits = length(Rx_bitstreams);
 if mod(nBits, 8) ~= 0
     nBitsToKeep = nBits - mod(nBits, 8); 

@@ -157,7 +157,7 @@ disp('Start Discretiser and Manifold Extender');
 N = 5; % Num of Antennas
 N_ext = 2*N_c;% Extended Length
 %Extended Signal
-x_n = fMainfoldExtender(Rx_symbols, N_c);
+x_n = fMainfoldExtender(Rx_symbols.', N_c);
 
 %% STAR Channel Estimation
 disp('Start STAR Channel Estimation');
