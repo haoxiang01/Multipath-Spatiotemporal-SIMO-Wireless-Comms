@@ -9,7 +9,7 @@ close all;
 addpath('Wrappers\');
 addpath('Data\hh923\Task1\');
 
-disp('......Initization: 1 unknown Transmiter and 4 known Receiver .......');
+disp('................initialization................');
 disp('Load four locations for 4 Rx');
 load Rx1.mat
 load Rx2.mat
@@ -26,7 +26,7 @@ alpha = 2;  % Path Loss exponent
 SNR = 20;   % SNR
 Ts = 5e-9;  % Sampling period
 Rx = [0,0; 60,-88; 100,9;60,92];% Locations of Rxs
-disp('...................................................');
+disp('.......................................................');
 fprintf('\n');
 
 %%  TOA Localisation
@@ -47,6 +47,7 @@ disp('...................................................');
 fprintf('\n');
 
 %% TDOA Localisation
+disp('..............Task-1b TDOA Localisation................');
 disp('Start TDOA Association Stage');
 rhoi1 = zeros(3,1);
 rhoi1(1) = (t2 - t1) * c;
@@ -56,3 +57,5 @@ rhoi1(3) = (t4 - t1) * c;
 disp('Start TDOA Metric Fusion Stage');
 r_m = fTDOAMetric(Rx,rhoi1);
 disp(['The location of the Tx is : ',num2str(r_m')]);
+disp('........................................................');
+fprintf('\n');
