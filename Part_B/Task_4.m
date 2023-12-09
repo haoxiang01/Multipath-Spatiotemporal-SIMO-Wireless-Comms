@@ -1,7 +1,7 @@
 %...............................................
 % Author: Haoxiang Huang, MSc CSP, IC. 
 % Date: 09-Dec-2023.
-% This is the Task2 design for the ACT CW PartB
+% This is the Task4 design for the ACT CW PartB
 %...............................................
 
 clc;
