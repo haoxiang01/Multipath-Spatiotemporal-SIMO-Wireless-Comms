@@ -71,7 +71,7 @@ disp(['The estimated Photo-1 DOAs (theta, phi) are : ',num2str(reshape(DOA_estim
 disp('Start STAR Beamformer');
 y_n = fSTARBeamformer(x_n,cartesianArray,GoldSeq1,delay_estimate,DOA_estimate,Beta_1);
 
-disp('Start DSSS-QPSK Demodulation');
+disp('Start DS-QPSK Demodulation');
 Rx_bitstreams = fDSQPSKDemodulator(y_n.',GoldSeq1,phi_mod);
 
 %%  Print the text

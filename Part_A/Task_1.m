@@ -41,8 +41,8 @@ bitstream_img1 = fImageSource(img1_path,P);
 bitstream_img2 = fImageSource(img2_path,P);
 bitstream_img3 = fImageSource(img3_path,P);
 
-%% DSSS-QPSK Modulation
-disp('Start DSSS-QPSK Modulation');
+%% DS-QPSK Modulation
+disp('Start DS-QPSK Modulation');
 X = 8; %alphabetical order of the 1st letter H of my surname Huang.
 Y = 8; %alphabetical order of the 1st letter H of my formal firstname Haoxiang.
 
@@ -154,7 +154,7 @@ disp('..............Task-1b Rake Receiver................');
 disp('Start Channel Estimation');
 delay_estimate1 = fChannelEstimation(Rx_symbols,Balanced_GoldSeq1,paths(1));
 disp(['The estimated photo-1 transmittion delay is: ',num2str(delay_estimate1)]);
-disp('Start DSSS-QPSK Demodulation');
+disp('Start DS-QPSK Demodulation');
 Rx_bitstreams = fDSQPSKDemodulator(Rx_symbols,Balanced_GoldSeq1,phi,delay_estimate1,betas(1));
 [~,BER_40db] = biterr(Rx_bitstreams, bitstream_img1);
 disp(['BER = ',num2str(BER_40db)]);

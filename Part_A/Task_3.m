@@ -44,7 +44,7 @@ bitstream_img2 = fImageSource(img2_path,P);
 bitstream_img3 = fImageSource(img3_path,P);
 
 %% DSSS-QPSK Modulation
-disp('Start DSSS-QPSK Modulation');
+disp('Start DS-QPSK Modulation');
 X = 8; %alphabetical order of the 1st letter H of my surname Huang.
 Y = 8; %alphabetical order of the 1st letter H of my formal firstname Haoxiang.
 
@@ -169,7 +169,7 @@ disp(['The estimated Photo-1 DOAs (theta, phi) are : ',num2str(reshape(DOA_estim
 disp('Start STAR Beamformer');
 y_n = fSTARBeamformer(x_n,cartesianArray,Balanced_GoldSeq1,delay_estimate,DOA_estimate,betas(1:paths(1)));
 
-disp('Start DSSS-QPSK Demodulation');
+disp('Start DS-QPSK Demodulation');
 
 Rx_bitstreams = fDSQPSKDemodulator(y_n.',Balanced_GoldSeq1,phi);
 [~,BER_40db] = biterr(Rx_bitstreams, bitstream_img1);
