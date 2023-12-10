@@ -41,5 +41,7 @@ function [bitsOut,x,y]=fImageSource(filename,P)
 
     % Output the bitstream
     bitsOut = imgBits;
+    
+    
 end
 
