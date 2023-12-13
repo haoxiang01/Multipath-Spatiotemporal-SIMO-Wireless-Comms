@@ -34,7 +34,8 @@ function [delay_estimate, DOA_estimate, beta_estimate]=fChannelEstimation(symbol
         d_max = len_symbolsIn - len_in ;% the maximum relative delay
         
         %correlator based on max power
-        powers = zeros(d_max+1,1); %delay range (0-dmax),so dmax+1 items
+        %delay range (0-dmax),so dmax+1 items
+        powers = zeros(d_max+1,1); 
         
         for d_i = 1:d_max+1
             start = d_i;
@@ -50,23 +51,34 @@ function [delay_estimate, DOA_estimate, beta_estimate]=fChannelEstimation(symbol
 
     % Array Antenna (STAR Channel Estimation)
     else
+        % N: Number of antennas, L: Symbol length
         [N, L] = size(symbolsIn);
         N_c = len_goldseq;
         N_ext = 2*N_c;
         
         %Shift matrix
         J = [zeros(1,N_ext-1),0;eye(N_ext-1),zeros(N_ext-1,1)];
-        c = [goldseq;zeros(N_c,1)];
+
+        % sample covariance matrix
         Rxx = symbolsIn*symbolsIn'/L;
+
+        % Detect M sources using the MDL criterion
         M = fMDL(Rxx,N,L);
-        Cost = fMuSIC(Rxx,c,M,N_c,cartesianArray,J);
-        %   Estimate the delay and DOA from the peak (MAX) of the Cost
+
+        %STAR-MuSIC
+        Cost = fSTARMuSIC(Rxx,goldseq,M,N_c,cartesianArray,J);
+
+        % Estimate the delay and DOA from the peak (MAX) of the Cost
         [maxValue,~] = maxk(max(real(Cost)),pathNum);
-        index = [];
-         for i = 1:pathNum
-                index = [index find(maxValue(i) == real(Cost))];
-         end
-         delay_estimate = floor(index/181);
-         DOA_estimate = [(index - delay_estimate*181 - 1).' zeros(pathNum,1)];
+        index = zeros(1,pathNum);
+
+        % Find the indices corresponding to the maximum values
+        for i = 1:pathNum
+              index(:,i) = find(maxValue(i) == real(Cost));
+        end
+        
+        % Estimate DOA
+        delay_estimate = floor(index/181);
+        DOA_estimate = [(index - delay_estimate*181 - 1).' zeros(pathNum,1)];
     end
 end

@@ -2,7 +2,7 @@
 % 07-Dec-2023
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% Perform Spatiotemporal Rake Beamformer
+% Perform Spatiotemporal Rake Beamformer (ACT-5 Slides P45 Equation 25)
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Inputs
 % symbolsIn (N_ext x N x L Complex) = The extended input symbols
@@ -22,20 +22,30 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 function [symbolsOut] = fSTARBeamformer(symbolsIn,arrays,goldSeq,delays,DOAs,betas)
-    goldSeq = 1 - 2 * goldSeq; % 0/1 -> -1/1
+    % 0/1 -> -1/1
+    goldSeq = 1 - 2 * goldSeq;
+
     N_c = size(goldSeq,1);
     N_ext = 2 * N_c;
-    c = [goldSeq;zeros(N_c,1)];
+
     % Shifting matrix
     J = [zeros(1,N_ext-1),0;eye(N_ext-1),zeros(N_ext-1,1)]; 
-    H = [];
+
+    % Extended Gold sequence with zeros
+    c = [goldSeq;zeros(N_c,1)];
+    
+    % ST manifold matrix
+    H = zeros(size(symbolsIn,1),length(delays));
     
     for i = 1:length(delays)
-        amv = spv(arrays,DOAs(i,:));
-        h_i = kron(amv,J^delays(i)*c);
-        H = [H h_i];
+        % mainfold vector
+        S = spv(arrays,DOAs(i,:));
+        % extended mainfold
+        h_i = kron(S ,J^delays(i)*c);
+        H(:,i) = h_i;
     end
     
+    %STAR-RAKE weight vector(Ref: ACT-5 Slides P45 Equation 25)
     w = H * betas;
     symbolsOut = w' * symbolsIn;
 end

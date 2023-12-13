@@ -19,11 +19,15 @@ function M = fMDL(Rxx,N,L)
     MDL = zeros(1,N);
     
     for k = 0:N-1
-        a = vpa(prod(eigenv(k+1:N) .^(1/(N-k))),6);
-        b = (1/(N-k)) * sum(eigenv(k+1:N));
-        MDL(k+1) = -1 * log((a / b).^((N-k)*L)) + 1/2 * k*(2*N-k) * log(L);
+        % geometric mean of the smallest N-k eigenvalues
+        num = vpa(prod(eigenv(k + 1:N) .^(1 / (N - k))), 6);
+        % arithmetic mean of the smallest N-k eigenvalues
+        den = (1/(N-k)) * sum(eigenv(k+1:N));
+        % compute the MDL criterion(ACT-4 slides p34)
+        MDL(k+1) = -1 * log((num / den).^((N - k) * L)) + 1 / 2 * k * (2 * N - k) * log(L);
     end
-    
+
+    %find the min
     [~,M] = min(MDL);
     M = M - 1;
 

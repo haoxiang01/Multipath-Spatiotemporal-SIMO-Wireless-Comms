@@ -5,48 +5,53 @@
 % + Please execute this script in the directory: '..\PartA\'
 % + Please ensure to include the util package 'Wrappers'
 %   and 'Photos' folder
+% + Here, the Channel SNR is defaultly set to 0 dB. However, you can 
+%   manually adjust it to any desired value (e.g. 40 dB) in line 20
 %...............................................
 
 clc;
 clear;
 close all;
+%add the environment path of util packages
 addpath('Wrappers')
 
+%% First, set your desired SNR
+SNR = 0;
+% SNR = 40;
+
 %% Initialization and Load transmitted images
+%image environment path 
 img1_path = 'Photos\photo1.png';
 img2_path = 'Photos\photo2.png';
 img3_path = 'Photos\photo3.png';
 
-
 disp('........Initization: 3 Co-channel Transmiter.........');
 disp('Load three Images for three Users');
-Image1 = imread(img1_path);
-Image2 = imread(img2_path);
-Image3 = imread(img3_path);
-figure;
-subplot(1,3,1);
-imshow(Image1);
-title('Original Desired Image (User1)');
-subplot(1,3,2);
-imshow(Image2);
-title('Original Interference Image (User2)')
-subplot(1,3,3);
-imshow(Image3);
-title('Original Interference Image (User3)')
-[x1,y1,~] = size(Image1);
-[x2,y2,~] = size(Image2);
-[x3,y3,~] = size(Image3);
+% set the maximum width and height limits for the image
+% here limitation is required by the official doc
+width_limit = 160;
+height_limit = 112;
 
-Q1 = x1*y1*3*8;
-Q2 = x2*y2*3*8;
-Q3 = x3*y3*3*8;
-P = max([Q1,Q2,Q3]);
+% read and display images
+[bits,widths,heights] = fShowImg(img1_path,img2_path,img3_path,width_limit,height_limit);
 
-bitstream_img1 = fImageSource(img1_path,P);
-bitstream_img2 = fImageSource(img2_path,P);
-bitstream_img3 = fImageSource(img3_path,P);
+% color channels per pixel
+zPixel = 3;
 
-%% DSSS-QPSK Modulation
+% bits per integer
+bitInt = 8;
+widthMax = max(widths);
+heightMax = max(heights);
+
+%the maximum number of bits required for the image
+bitsMax = widthMax * heightMax * zPixel * bitInt;
+
+%imgs to bitstream
+bitstream_img1 = fImageSource(img1_path,bitsMax);
+bitstream_img2 = fImageSource(img2_path,bitsMax);
+bitstream_img3 = fImageSource(img3_path,bitsMax);
+
+%% DS-QPSK Modulation
 disp('Start DS-QPSK Modulation');
 X = 8; %alphabetical order of the 1st letter H of my surname Huang.
 Y = 8; %alphabetical order of the 1st letter H of my formal firstname Haoxiang.
@@ -65,24 +70,25 @@ m = length(coeffs1) - 1;
 % maximum period of the shift register
 N_c = 2.^m - 1; 
 
-% generate all possible the Gold Sequences
-GoldSeq_buffer = [];
+%generate all possible the Gold Sequences
+GoldSeq_buffer = zeros(N_c,N_c);
 
 for index = 1:N_c
-    GoldSeq_buffer = [GoldSeq_buffer fGoldSeq(mSeq1,mSeq2,index)];
+    GoldSeq_buffer(:,index) = fGoldSeq(mSeq1,mSeq2,index);
 end
+
 GoldSeq_buffer = [GoldSeq_buffer mSeq1 mSeq2];
 GoldSeq_buffer_trans = 1-2.*GoldSeq_buffer;
 
-% calculate shift delay of the sencond m seqence
-delay_threshold = 1 + mod(X + Y,12);
+% calculate shift delay lowerbound required by the official doc
+delay_lowerbound = 1 + mod(X + Y,12);
 delay=0;
 
-% find Balanced Gold Sequence delay index with satisfied condition
+% find Balanced Gold Sequence delay index with satisfied conditions
 for index = 1:N_c+2
-    if sum(GoldSeq_buffer_trans(:,index)) == -1 && index>= delay_threshold
+    if sum(GoldSeq_buffer_trans(:,index)) == -1 && index>= delay_lowerbound
         delay = index;
-        break
+        break;
     end
 end
 
@@ -94,7 +100,7 @@ Balanced_GoldSeq3 = GoldSeq_buffer(:,delay+2);
 %calculate the angle for DS-QPSK modulation
 phi = (X+2*Y) * pi/180;
 
-%get the symbols of transmitted three user images
+%get the mapped symbols of transmitted three user images using DS-QPSK
 symbols_img1 = fDSQPSKModulator(bitstream_img1, Balanced_GoldSeq1, phi);
 symbols_img2 = fDSQPSKModulator(bitstream_img2, Balanced_GoldSeq2, phi);
 symbols_img3 = fDSQPSKModulator(bitstream_img3, Balanced_GoldSeq3, phi);
@@ -103,18 +109,17 @@ disp('...................................................');
 
 %% Task3(0dB)
 fprintf('\n');
-disp('..............Task-3 (SNR = 40 dB).................')
+disp('..............Task-3 (SNR = 0 dB).................')
 %  Channel Paramater
 delays = [5;7;12];
 betas = [.4 ; .7 ; .2];
 DOAs = [30 0;90 0;150 0];
 paths = [1,1,1];
-%array = [0,0,0];
-SNR = 0;
 disp('.............Task-3 Channel Parameters..........');
 disp(['SNR = ',num2str(SNR)]);
-disp(['Delay = ',num2str(delays(1)),',',num2str(delays(2)),',',num2str(delays(3))]);
-disp(['Beta = ',num2str(betas(1)),',',num2str(betas(2)),',',num2str(betas(3))]);
+disp(['Delay = ',num2str(delays(1)),', ',num2str(delays(2)),', ',num2str(delays(3))]);
+disp(['Beta = ',num2str(betas(1)),', ',num2str(betas(2)),', ',num2str(betas(3))]);
+disp(['DOAs (Theta) = ',num2str(DOAs(1)),', ',num2str(DOAs(2)),', ',num2str(DOAs(3))]);
 disp('...................................................');
 
 
@@ -123,42 +128,24 @@ disp('...................................................');
 fprintf('\n')
 disp('.............Task3 UCA STAR Receiver................');
 disp('Deploy Uniform Circular Array (UCA)')
-%the differece of each angle
-delta_angle = 2*pi/5;
-% radius of the UCA
-r = 1/(2*sin(delta_angle/2));
+% 1st antenna degree with respect to x-axis
 angle0 = pi/6;
-angles = angle0 + (0:4)*delta_angle;
-polarArray = r * exp(1i * angles);
-cartesianArray = [real(polarArray); imag(polarArray); zeros(1, length(polarArray))]';
-figure(2);
-plot(cartesianArray(:, 1), cartesianArray(:, 2), 'xr', ...
-    'MarkerSize', 10, 'LineWidth', 2, 'MarkerFaceColor', 'r');
-hold on;
-plot(0, 0, '+k', 'MarkerSize', 10, 'LineWidth', 2);
-for i = 1:size(cartesianArray, 1)
-    plot([0, cartesianArray(i, 1)], [0, cartesianArray(i, 2)], '--k'); 
-end
-angleText = sprintf('%.2f°', rad2deg(2*pi/5));
-text(0, 0, angleText, 'VerticalAlignment', 'bottom', 'HorizontalAlignment', 'right');
 
-legend('Antenna', 'FontSize', 12); 
-xlabel('X', 'FontSize', 14); 
-ylabel('Y', 'FontSize', 14);
-axis([-1 1 -1 1]);
-title('The Distribution of UCA', 'FontSize', 16); 
+% Number of the Rx antennas
+N_Rx= 5;
 
-set(gca, 'FontSize', 12); 
-set(gcf, 'Color', 'w'); 
-grid on;
+% Model UCA
+cartesianArray = fUCA(N_Rx,angle0);
 
+%Transmitting
 disp('Transmit the images through this channel');
 Rx_symbols = fChannel(paths,Tx_symbols,delays,betas,DOAs,SNR,cartesianArray);
 
 %% Discretiser and Manifold Extender
 disp('Start Discretiser and Manifold Extender');
-N = 5; % Num of Antennas
-N_ext = 2*N_c;% Extended Length
+% Extended Length
+N_ext = 2*N_c;
+
 %Extended Signal
 x_n = fMainfoldExtender(Rx_symbols.', N_c);
 
@@ -172,13 +159,15 @@ disp(['The estimated Photo-1 DOAs (theta, phi) are : ',num2str(reshape(DOA_estim
 disp('Start STAR Beamformer');
 y_n = fSTARBeamformer(x_n,cartesianArray,Balanced_GoldSeq1,delay_estimate,DOA_estimate,betas(1:paths(1)));
 
+%% Demodulate
 disp('Start DS-QPSK Demodulation');
-
 Rx_bitstreams = fDSQPSKDemodulator(y_n.',Balanced_GoldSeq1,phi);
-[~,BER_40db] = biterr(Rx_bitstreams, bitstream_img1);
-disp(['BER = ',num2str(BER_40db)]);
+
+% Calculate the Bit Error Rate (BER)
+[~,BER_0db] = biterr(Rx_bitstreams, bitstream_img1);
+disp(['BER = ',num2str(BER_0db)]);
 figure();
-fImageSink(Rx_bitstreams, Q1,x1,y1);
-title({'Task3';'STAR Receiver: Desired Received Photo1 '; ['SNR=',num2str(SNR),' dB , ','BER=',num2str(BER_40db)]});
+fImageSink(Rx_bitstreams, bits(1), widths(1),heights(1));
+title({'Task3';'STAR Receiver: Desired Received Photo1 '; ['SNR=',num2str(SNR),' dB , ','BER=',num2str(BER_0db)]});
 disp('...................................................');
 fprintf('\n');

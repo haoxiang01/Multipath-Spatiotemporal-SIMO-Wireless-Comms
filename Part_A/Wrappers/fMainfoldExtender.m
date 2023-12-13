@@ -14,22 +14,35 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 function [x_n] = fMainfoldExtender(symbolsIn,N_c)
-    x_n = [];
+    % extended Dims
     N_ext = 2 * N_c;
+    % number of antennas
     N = size(symbolsIn, 1);
-    M = size(symbolsIn, 2); % length of symbols
-    numBlocks = floor(M / N_c);  % Calculate the number of blocks (L)
+    % length of symbols
+    M = size(symbolsIn, 2); 
+    % calculate the number of blocks (L)
+    numBlocks = floor(M / N_c);
+    % pre-allocate the output of extended mainfold vector
+    x_n = zeros(N*N_ext,numBlocks);
     
     for j = 1:numBlocks
+        % start index for the current block
         start_ = 1 + (j-1)*N_c;
+        % end index for the current block
         end_ = (j+1)*N_c;
+        % if the end index is within the symbol length
         if end_ < M
+            % Vectorisation
             temp = reshape(symbolsIn(:, start_:end_).', [N * N_ext, 1]);
+        % if the end index exceeds the symbol length
         else
+            % pad with zeros
             tempBlock = zeros(N, end_ - start_ + 1);
             tempBlock(:, 1:M - start_ + 1) = symbolsIn(:, start_:end);
+            % Vectorisation
             temp = reshape(tempBlock.', [N * N_ext, 1]);
         end
-        x_n  = [x_n temp];% Append 
+        % Append vectorized current block to the output matrix
+        x_n(:,j) = temp;
     end
 end
