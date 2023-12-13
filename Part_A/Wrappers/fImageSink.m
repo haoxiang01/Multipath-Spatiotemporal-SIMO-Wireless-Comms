@@ -14,20 +14,29 @@
 % None
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-function fImageSink(bitsIn,Q,x,y)
-img = zeros(x,y,3);
-bitsIn = bitsIn(1:Q); % remove the padding zero
-conveter = [2^7, 2^6, 2^5, 2^4, 2^3, 2^2, 2, 1];
-Qc = Q/3;
-for num = 1:3
-    bits = bitsIn((num-1)*Qc+1 : num*Qc); % bits of one channel
-    bits = reshape(bits,8,x,y);
-    for i = 1:x
-        for j = 1:y
-            img(i,j,num) = conveter * bits(:,i,j); % convert from binary values to double value
-        end
+function fImageSink(bitsIn, Q, x, y)
+    % Ensure bitsIn contains only the relevant bits
+    bitsIn = bitsIn(1:Q);
+
+    % Number of bits per color channel
+    Qc = Q / 3;
+
+    img = zeros(x, y, 3, 'uint8');
+
+    for channel = 1:3
+        % Extract bits for the current channel
+        channelBits = bitsIn((channel - 1) * Qc + 1 : channel * Qc);
+
+        % Reshape for 8 bits
+        channelBits = reshape(channelBits, 8, []);
+
+        % binary to integers
+        channelImage = bi2de(channelBits', 'left-msb');
+
+        % Reshape 
+        img(:,:,channel) = reshape(channelImage, [x, y]);
     end
-end
-img = uint8(img);
-imshow(img);
+
+   
+    imshow(img);
 end

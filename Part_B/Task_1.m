@@ -7,7 +7,7 @@ clc;
 clear;
 close all;
 addpath('Wrappers\');
-addpath('Data\hh923\Task1\');
+addpath('Data\rw1123\Task1\');
 
 disp('................initialization................');
 disp('Load four locations for 4 Rx');

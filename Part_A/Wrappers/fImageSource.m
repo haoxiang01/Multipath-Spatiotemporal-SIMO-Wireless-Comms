@@ -21,7 +21,8 @@
 function [bitsOut,x,y]=fImageSource(filename,P)
     % Read the image
     img = imread(filename);
-
+    
+    %Calculate image width and height
     [x, y, ~] = size(img);
 
     % Calculate the number of bits Q
@@ -34,14 +35,13 @@ function [bitsOut,x,y]=fImageSource(filename,P)
 
     
     if P >= Q
-        imgBits = [imgBits; zeros(P-Q, 1)];% Pad with zeros if necessary
+        % Pad with zeros if necessary
+        imgBits = [imgBits; zeros(P-Q, 1)];
     else
         error('P must be greater than or equal to Q = AxBx3x8');
     end
 
     % Output the bitstream
     bitsOut = imgBits;
-    
-    
 end
 

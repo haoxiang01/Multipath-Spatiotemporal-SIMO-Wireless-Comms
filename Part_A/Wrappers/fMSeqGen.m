@@ -1,4 +1,4 @@
-% Haoxiang Huang, CSP(EE4/MSc), 2023, Imperial College.
+% Haoxiang Huang, CSP(MSc), 2023, Imperial College.
 % 05-Dec-2023
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -18,7 +18,8 @@ function [MSeq]=fMSeqGen(coeffs)
 
     % Initialize 
     reg = ones(m, 1); 
-    N_c = 2.^m - 1; % maximum period of the shift register
+    % maximum period of the shift register
+    N_c = 2.^m - 1; 
     MSeq = zeros(N_c, 1); 
 
     % Generate the M-sequence
@@ -26,12 +27,10 @@ function [MSeq]=fMSeqGen(coeffs)
         % XOR
         feedback = mod(sum(reg .* coeffs(2:end)), 2);
         
-      
         % Shift the register
         reg = [feedback; reg(1:end-1)];
 
         % Store the last bit of the register into MSeq
         MSeq(i) = reg(end);
-        
     end
 end

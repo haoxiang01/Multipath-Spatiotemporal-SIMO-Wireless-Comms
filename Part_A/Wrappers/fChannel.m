@@ -25,40 +25,52 @@
 
 function [symbolsOut]=fChannel(paths,symbolsIn,delay,beta,DOA,SNR,array)
 %% Parameters
-num_Tx = size(symbolsIn,2); % number of Tx
+% number of Tx
+num_Tx = size(symbolsIn,2); 
 
+% length of the transmitted symbols
+len_in = size(symbolsIn,1);  
+% length of the received symbols
+len_out = len_in + max(delay);
 
-len_in = size(symbolsIn,1);  % length of the source symbols
-len_out = len_in + max(delay); %length of the received symbols
+% number of antennas
+N = size(array,1); 
 
-%use defin in ACT-3 slides p42
-N = size(array,1); % number of antennas
-L = len_out;
-M = num_Tx;
-symbolsOut = zeros(N,len_out);
-
+% index for each path in the system 
+% starting with source 1
 paths_index = 1;
 
-for i = 1:M
+% received symbols
+symbolsOut = zeros(len_out, N);
+
+%% Transmiting through channel
+% use defin in ACT-3 slides p52
+for i = 1:num_Tx
+    % if paths(i) > 1 muti-path
     for j = 1:paths(i)
-        m_t_min_tao = zeros(len_out,1);
-        m_t_min_tao(1+delay(paths_index):len_in+delay(paths_index)) = symbolsIn(:,i);
-        amv = spv(array,DOA(paths_index,:));
-        x_t = amv * m_t_min_tao.' * beta(i);
+        % get the message signal of current path by delay and scaling
+        m_t = zeros(len_out,1);
+        m_t(1 + delay(paths_index) : len_in + delay(paths_index)) = symbolsIn(:,i);
+        % channel muitpath impusle response(Manifold vector * fadding coeff)
+        S = beta(i) * spv(array,DOA(paths_index,:));
+        % received signal 
+        x_t = S.' * m_t;
+        % add to the current channel stream
         symbolsOut = symbolsOut + x_t;
         paths_index = paths_index + 1;
     end
 end
 
-%Add AWGN
-%desired signal power
+%% Add AWGN
+% desired signal power
 Pd_dB = 10*log10(sum(abs((beta(1:paths(1)) .* symbolsIn(1,1))).^2)); 
 
-%noise power
+% noise power
 Pn_dB = Pd_dB - SNR; 
 Pn = 10.^(Pn_dB/10);
-noise = sqrt(Pn/2) * (randn(size(symbolsOut)) + 1i * randn(size(symbolsOut))); % AWGN noise
-symbolsOut = symbolsOut + noise;                                                    % Add noise
-symbolsOut = symbolsOut.';
+% AWGN noise
+noise = sqrt(Pn/2) * (randn(size(symbolsOut)) + 1i * randn(size(symbolsOut)));
+% add noise
+symbolsOut = symbolsOut + noise;                     
 end
 

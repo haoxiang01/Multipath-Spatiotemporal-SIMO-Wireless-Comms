@@ -15,7 +15,8 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 function [GoldSeq]=fGoldSeq(mseq1,mseq2,shift)
-    % ensure the input two m sequences have the same length
+
+    % Ensure the input two m sequences have the same length
     if length(mseq1) ~= length(mseq2)
         error('M-sequences must be of the same length');
     end

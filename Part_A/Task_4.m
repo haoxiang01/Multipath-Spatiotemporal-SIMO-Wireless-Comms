@@ -64,8 +64,8 @@ x_n = fMainfoldExtender(Xmatrix, N_c);
 disp('Start STAR Channel Estimation');
 PathNum = 3;
 [delay_estimate,DOA_estimate] = fChannelEstimation(x_n,GoldSeq1,PathNum,cartesianArray);
-disp(['The estimated Photo-1 delay are : ',num2str(delay_estimate)]);
-disp(['The estimated Photo-1 DOAs (theta, phi) are : ',num2str(reshape(DOA_estimate',1,numel(DOA_estimate)))]);
+disp(['The estimated delay are : ',num2str(delay_estimate)]);
+disp(['The estimated DOAs (theta, phi) are : ',num2str(reshape(DOA_estimate',1,numel(DOA_estimate)))]);
 
 %% STAR Beamformer
 disp('Start STAR Beamformer');

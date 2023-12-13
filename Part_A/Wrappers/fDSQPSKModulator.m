@@ -19,11 +19,12 @@ function [symbolsOut]=fDSQPSKModulator(bitsIn,goldseq,phi)
     %% QPSK Modulation
     %calculate length of the transmitted symbol squences
     len_symbols = length(bitsIn)/2;
+   
     symbols = zeros(len_symbols,1);
-    
     for index = 1:len_symbols
         %2 bits per symbols
         bit_pairs = [num2str(bitsIn(2*index-1)),num2str(bitsIn(2*index))];
+        %QPSK mapping
         switch bit_pairs
             case '00'
                 symbols(index) = sqrt(2)*(cos(phi)+1i*sin(phi));
@@ -39,6 +40,8 @@ function [symbolsOut]=fDSQPSKModulator(bitsIn,goldseq,phi)
     %% DSSS
     % convert Gold Sequence from 0/1 to 1/-1
     goldseq_trans= 1-2*goldseq;
+
+    % spreading the symbols
     symbolsOut = goldseq_trans * symbols.';
     symbolsOut = symbolsOut(:);
 end
