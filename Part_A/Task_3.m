@@ -1,11 +1,14 @@
 %...............................................
-% Author: Haoxiang Huang, MSc CSP, IC. 
-% Date: 06-Dec-2023.
-% This is the Task3 design for the ACT CW PartA
+% + Author: Haoxiang Huang, MSc CSP, IC. 
+% + Date: 06-Dec-2023.
+% + This is the Task3 design for the ACT CW PartA
+% + Please execute this script in the directory: '..\PartA\'
+% + Please ensure to include the util package 'Wrappers'
+%   and 'Photos' folder
 %...............................................
 
 clc;
-clear all;
+clear;
 close all;
 addpath('Wrappers')
 

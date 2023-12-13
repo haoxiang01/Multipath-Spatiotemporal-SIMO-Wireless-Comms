@@ -8,7 +8,7 @@
 %...............................................
 
 clc;
-clear all;
+clear;
 close all;
 
 %add the environment path of util packages

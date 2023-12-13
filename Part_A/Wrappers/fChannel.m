@@ -54,7 +54,7 @@ for i = 1:num_Tx
         % channel muitpath impusle response(Manifold vector * fadding coeff)
         S = beta(i) * spv(array,DOA(paths_index,:));
         % received signal 
-        x_t = S.' * m_t;
+        x_t = S.' .* m_t;
         % add to the current channel stream
         symbolsOut = symbolsOut + x_t;
         paths_index = paths_index + 1;
