@@ -60,7 +60,7 @@ disp('Start DS-QPSK Demodulation');
 Rx_bitstreams = fDSQPSKDemodulator(y_n.',GoldSeq1,phi_mod);
 
 %%  Print the text
-%Convert the bitstream to binary numbers
-
+%Convert the bitstream to string
+str = fbit2str(Rx_bitstreams);
 disp('The received text-message is :');
 disp(str);
