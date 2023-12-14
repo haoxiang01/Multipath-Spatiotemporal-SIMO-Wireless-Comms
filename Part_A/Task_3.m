@@ -35,16 +35,8 @@ height_limit = 112;
 % read and display images
 [bits,widths,heights] = fShowImg(img1_path,img2_path,img3_path,width_limit,height_limit);
 
-% color channels per pixel
-zPixel = 3;
-
-% bits per integer
-bitInt = 8;
-widthMax = max(widths);
-heightMax = max(heights);
-
 %the maximum number of bits required for the image
-bitsMax = widthMax * heightMax * zPixel * bitInt;
+bitsMax = max(widths) * max(heights) * 3 * 8;
 
 %imgs to bitstream
 bitstream_img1 = fImageSource(img1_path,bitsMax);
@@ -60,50 +52,16 @@ Y = 8; %alphabetical order of the 1st letter H of my formal firstname Haoxiang.
 coeffs1 = [1 0 0 1 1]'; %D^4 + D + 1
 coeffs2 = [1 1 0 0 1]'; %D^4 + D^3 + 1
 
-%generate m sequence
-mSeq1= fMSeqGen(coeffs1);
-mSeq2= fMSeqGen(coeffs2);
-
-% degree m
-m = length(coeffs1) - 1; 
-
-% maximum period of the shift register
-N_c = 2.^m - 1; 
-
-%generate all possible the Gold Sequences
-GoldSeq_buffer = zeros(N_c,N_c);
-
-for index = 1:N_c
-    GoldSeq_buffer(:,index) = fGoldSeq(mSeq1,mSeq2,index);
-end
-
-GoldSeq_buffer = [GoldSeq_buffer mSeq1 mSeq2];
-GoldSeq_buffer_trans = 1-2.*GoldSeq_buffer;
-
-% calculate shift delay lowerbound required by the official doc
-delay_lowerbound = 1 + mod(X + Y,12);
-delay=0;
-
-% find Balanced Gold Sequence delay index with satisfied conditions
-for index = 1:N_c+2
-    if sum(GoldSeq_buffer_trans(:,index)) == -1 && index>= delay_lowerbound
-        delay = index;
-        break;
-    end
-end
-
-% find the Balanced Gold Sequence for 3 users
-Balanced_GoldSeq1 = GoldSeq_buffer(:,delay);
-Balanced_GoldSeq2 = GoldSeq_buffer(:,delay+1);
-Balanced_GoldSeq3 = GoldSeq_buffer(:,delay+2);
+%Generate Balanced Gold Sequence
+Balanced_GoldSeq = fBGoldseq(X,Y,coeffs1,coeffs2);
 
 %calculate the angle for DS-QPSK modulation
 phi = (X+2*Y) * pi/180;
 
 %get the mapped symbols of transmitted three user images using DS-QPSK
-symbols_img1 = fDSQPSKModulator(bitstream_img1, Balanced_GoldSeq1, phi);
-symbols_img2 = fDSQPSKModulator(bitstream_img2, Balanced_GoldSeq2, phi);
-symbols_img3 = fDSQPSKModulator(bitstream_img3, Balanced_GoldSeq3, phi);
+symbols_img1 = fDSQPSKModulator(bitstream_img1, Balanced_GoldSeq(:, 1), phi);
+symbols_img2 = fDSQPSKModulator(bitstream_img2, Balanced_GoldSeq(:, 2), phi);
+symbols_img3 = fDSQPSKModulator(bitstream_img3, Balanced_GoldSeq(:, 3), phi);
 Tx_symbols = [symbols_img1,symbols_img2,symbols_img3];
 disp('...................................................');
 
@@ -126,7 +84,7 @@ disp('...................................................');
 
 %% Define Uniform Circular Array (UCA)
 fprintf('\n')
-disp('.............Task3 UCA STAR Receiver................');
+disp('.............Task-3 UCA STAR Receiver................');
 disp('Deploy Uniform Circular Array (UCA)')
 % 1st antenna degree with respect to x-axis
 angle0 = pi/6;
@@ -143,6 +101,12 @@ Rx_symbols = fChannel(paths,Tx_symbols,delays,betas,DOAs,SNR,cartesianArray);
 
 %% Discretiser and Manifold Extender
 disp('Start Discretiser and Manifold Extender');
+% degree m
+m = length(coeffs1) - 1; 
+
+% maximum period of the shift register
+N_c = 2.^m - 1; 
+
 % Extended Length
 N_ext = 2*N_c;
 
@@ -151,17 +115,17 @@ x_n = fMainfoldExtender(Rx_symbols.', N_c);
 
 %% STAR Channel Estimation
 disp('Start STAR Channel Estimation');
-[delay_estimate,DOA_estimate] = fChannelEstimation(x_n,Balanced_GoldSeq1,paths(1),cartesianArray);
+[delay_estimate,DOA_estimate] = fChannelEstimation(x_n, Balanced_GoldSeq(:, 1), paths(1),cartesianArray);
 disp(['The estimated Photo-1 delay are : ',num2str(delay_estimate)]);
 disp(['The estimated Photo-1 DOAs (theta, phi) are : ',num2str(reshape(DOA_estimate',1,numel(DOA_estimate)))]);
 
 %% STAR Beamformer
 disp('Start STAR Beamformer');
-y_n = fSTARBeamformer(x_n,cartesianArray,Balanced_GoldSeq1,delay_estimate,DOA_estimate,betas(1:paths(1)));
+y_n = fSTARBeamformer(x_n,cartesianArray, Balanced_GoldSeq(:, 1), delay_estimate,DOA_estimate,betas(1:paths(1)));
 
 %% Demodulate
 disp('Start DS-QPSK Demodulation');
-Rx_bitstreams = fDSQPSKDemodulator(y_n.',Balanced_GoldSeq1,phi);
+Rx_bitstreams = fDSQPSKDemodulator(y_n.', Balanced_GoldSeq(:, 1),phi);
 
 % Calculate the Bit Error Rate (BER)
 [~,BER_0db] = biterr(Rx_bitstreams, bitstream_img1);

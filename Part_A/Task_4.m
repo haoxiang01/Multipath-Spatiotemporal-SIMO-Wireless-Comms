@@ -61,13 +61,6 @@ Rx_bitstreams = fDSQPSKDemodulator(y_n.',GoldSeq1,phi_mod);
 
 %%  Print the text
 %Convert the bitstream to binary numbers
-nBits = length(Rx_bitstreams);
-if mod(nBits, 8) ~= 0
-    nBitsToKeep = nBits - mod(nBits, 8); 
-    Rx_bitstreams = Rx_bitstreams(1:nBitsToKeep); 
-end
-binValues = reshape(Rx_bitstreams, 8, [])'; 
-decValues = bi2de(binValues, 'left-msb'); 
-str = char(decValues)';
+
 disp('The received text-message is :');
 disp(str);
