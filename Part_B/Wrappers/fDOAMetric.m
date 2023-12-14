@@ -1,8 +1,20 @@
 % Haoxiang Huang, CSP (MSc), 2023, Imperial College.
 % 09-Dec-2023
-
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% + Perform DOA Metric Stage 
+% + ref1: ACT-6 slides P42
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Inputs
+% Rx = Location of receiver
+% rho = estimated distance
+% DOAs = estimated DOAs
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Outputs
+% r_m = Location of Tx
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 function r_m= fDOAMetric(Rx,rho,DOAs)
+    
     N = size(Rx,1);
     b = zeros(2,N);
     for i=1:N
@@ -14,6 +26,7 @@ function r_m= fDOAMetric(Rx,rho,DOAs)
     r_m= inv(H'*H)*H'*b;
 
     %%  Plot
+    DOAs=DOAs/180*pi;
     figure;
     plot(Rx(:,1),Rx(:,2),'ob',...
          'MarkerSize',10,...

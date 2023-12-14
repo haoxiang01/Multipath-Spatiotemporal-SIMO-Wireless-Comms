@@ -1,5 +1,18 @@
 % Haoxiang Huang, CSP (MSc), 2023, Imperial College.
 % 08-Dec-2023
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% + Perform DOA Metric Stage 
+% + ref1: ACT-6 slides P42
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Inputs
+% x_DOA = sample of signal
+% Rx = Location of receiver
+% r_UCA = array distribution
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Outputs
+% rho = estimated distance
+% DOAs = estimated DOAs
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 function [rhos,DOAs] = fDOAAssociation(x_DOAs,Rx,r_UCA)
     DOAs = zeros(4,1);
