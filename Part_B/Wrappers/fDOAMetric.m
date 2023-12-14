@@ -43,7 +43,7 @@ function r_m= fDOAMetric(Rx,rho,DOAs)
         fimplicit(fc,[-150 150 -150 150]);
     end
     
-    title('DOA Localisation');
+    title({'Task3-DOA Localisation';['The Tx Coordinate is: (',num2str(r_m(1)),' , ',num2str(r_m(2)) , ')']});
     legend('Receivers','Transmitter');
     xlabel('x');ylabel('y');
     axis equal
