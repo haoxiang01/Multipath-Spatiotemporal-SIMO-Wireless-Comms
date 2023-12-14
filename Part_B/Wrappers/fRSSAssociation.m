@@ -14,5 +14,6 @@
 function rho = fRSSAssociation(x,PTx,lambda)
     % Power of Rx
     PRx = x * x' / size(x,2);
-    rho = sqrt(PTx/PRx)*lambda/4/pi;
+    %PRx = mean(abs(x).^2);
+    rho = sqrt(PTx/PRx)*(lambda/(4*pi));
 end
