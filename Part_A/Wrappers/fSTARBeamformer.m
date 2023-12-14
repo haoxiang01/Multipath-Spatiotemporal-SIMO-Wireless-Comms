@@ -51,20 +51,20 @@ function [symbolsOut] = fSTARBeamformer(symbolsIn,arrays,goldSeq,delays,DOAs,bet
 
     %Plot Array Pattern of STAR-RAKE Beamformer
     figure();
-    g = zeros(181,N_c);
+    gain= zeros(181,N_c);
 
     for i = 1:181
         for j = 1:N_c
             S = spv(arrays,[i 0]);
             h = kron(S,(J^(j-1) * c));
-            g(i,j) = w'*h;
+            gain(i,j) = w'*h;
         end
     end
 
-    mesh(0:N_c-1, 0:180, abs(g));
-    title('STAR-RAKE Array Pattern');
+    mesh(0:N_c-1, 0:180, abs(gain));
+    title('STAR-RAKE Beamformer Array Pattern');
     xlabel('TOA (T)'); 
     ylabel('DOA (Degree)');
-    zlabel('gain');
+    zlabel('Gain');
     axis square;
 end
