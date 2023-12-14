@@ -45,7 +45,6 @@ fprintf('\n');
 disp('..............Task-3 DOA Localisation................');
 disp('Start DOA Association Stage');
 x_DOAs = [x1_DOA; x2_DOA; x3_DOA; x4_DOA];
-%x1 = x_DOAs(1:6,:);
 [rho,DOAs] = fDOAAssociation(x_DOAs,Rx,r_UCA);
 
 disp(['The estimated rho (1-4) are: ',num2str(rho')]);
