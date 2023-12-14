@@ -74,7 +74,7 @@ function [delay_estimate, DOA_estimate, beta_estimate]=fChannelEstimation(symbol
 
         % Find the indices corresponding to the maximum values
         for i = 1:pathNum
-              index(:,i) = find(maxValue(i) == real(Cost));
+              index(:,i) = find(maxValue(i) == real(Cost),1);
         end
         
         % Estimate DOA

@@ -6,7 +6,7 @@
 % + Please ensure to include the util package 'Wrappers'
 %   and 'Photos' folder
 % + Here, the Channel SNR is defaultly set to 0 dB. However, you can 
-%   manually adjust it to any desired value (e.g. 40 dB) in line 20
+%   manually adjust it to any desired value (e.g. 40 dB).
 %...............................................
 
 clc;
@@ -15,9 +15,22 @@ close all;
 %add the environment path of util packages
 addpath('Wrappers')
 
-%% First, set your desired SNR
-SNR = 0;
-% SNR = 40;
+%% Read SNR from User
+disp('First, please set your desired SNR (dB).')
+disp('You can enter any non-numeric value to defaultly set SNR to 0 dB')
+inputValue = input('Enter SNR (dB) value: ', 's'); % Read input as a string
+
+% Check if the input is numeric and not empty
+if isempty(str2num(inputValue))
+    % If input is non-numeric or empty, set SNR to 0
+    SNR = 0;
+else
+    % Convert the input string to a numeric value
+    SNR = str2num(inputValue);
+end
+
+% Display the SNR value
+disp(['SNR is set to: ', num2str(SNR),' dB']);
 
 %% Initialization and Load transmitted images
 %image environment path 
@@ -67,7 +80,7 @@ disp('...................................................');
 
 %% Task3(0dB)
 fprintf('\n');
-disp('..............Task-3 (SNR = 0 dB).................')
+disp(['..............Task-3 (SNR = ' num2str(SNR) ' dB).................'])
 %  Channel Paramater
 delays = [5;7;12];
 betas = [.4 ; .7 ; .2];
