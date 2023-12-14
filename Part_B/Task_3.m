@@ -1,7 +1,10 @@
 %...............................................
 % Author: Haoxiang Huang, MSc CSP, IC. 
 % Date: 08-Dec-2023.
-% This is the Task2 design for the ACT CW PartB
+% This is the Task3 design for the ACT CW PartB
+% + Please execute this script in the directory: '..\PartB\'
+% + Please ensure to include the util package 'Wrappers'
+% + Ref: ACT-6 Slides P42-P47
 %...............................................
 
 clc;
