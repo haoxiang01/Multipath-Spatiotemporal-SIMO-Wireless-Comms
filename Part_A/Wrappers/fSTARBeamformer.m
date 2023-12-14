@@ -48,4 +48,23 @@ function [symbolsOut] = fSTARBeamformer(symbolsIn,arrays,goldSeq,delays,DOAs,bet
     %STAR-RAKE weight vector(Ref: ACT-5 Slides P45 Equation 25)
     w = H * betas;
     symbolsOut = w' * symbolsIn;
+
+    %Plot Array Pattern of STAR-RAKE Beamformer
+    figure();
+    g = zeros(181,N_c);
+
+    for i = 1:181
+        for j = 1:N_c
+            S = spv(arrays,[i 0]);
+            h = kron(S,(J^(j-1) * c));
+            g(i,j) = w'*h;
+        end
+    end
+
+    mesh(0:N_c-1, 0:180, abs(g));
+    title('STAR-RAKE Array Pattern');
+    xlabel('TOA (T)'); 
+    ylabel('DOA (Degree)');
+    zlabel('gain');
+    axis square;
 end
