@@ -1,14 +1,16 @@
 %...............................................
-% Author: Haoxiang Huang, MSc CSP, IC. 
-% Date: 08-Dec-2023.
-% This is the Task2 design for the ACT CW PartB
+% + Author: Haoxiang Huang, MSc CSP, IC. 
+% + Date: 08-Dec-2023.
+% + This is the Task2 RSS Localisation design for the ACT CW PartB
+% + Please execute this script in the directory: '..\PartB\'
+% + Please ensure to include the util package 'Wrappers'
+% + Ref: ACT-6 Slides P23-P24
 %...............................................
-
 clc;
 clear;
 close all;
 addpath('Wrappers\');
-addpath('Data\rw1123\Task2\');
+addpath('Data\hh923\Task2\');
 
 disp('................initialization................');
 disp('Load four locations for 4 Rx');
@@ -35,13 +37,13 @@ disp('..............Task-2 RSS Localisation................');
 disp('Start RSS Association Stage');
 PTx_dB = 150;
 PTx = 10^(PTx_dB/10) * 10^-3; %Tx-Power
-lamda = c/Fc;% Wavelength
+lambda = c/Fc;% Wavelength
 
 rho = zeros(4,1);
-rho(1) = fRSSAssociation(x1_RSS,PTx,lamda);
-rho(2) = fRSSAssociation(x2_RSS,PTx,lamda);
-rho(3) = fRSSAssociation(x3_RSS,PTx,lamda);
-rho(4) = fRSSAssociation(x4_RSS,PTx,lamda);
+rho(1) = fRSSAssociation(x1_RSS,PTx,lambda);
+rho(2) = fRSSAssociation(x2_RSS,PTx,lambda);
+rho(3) = fRSSAssociation(x3_RSS,PTx,lambda);
+rho(4) = fRSSAssociation(x4_RSS,PTx,lambda);
 disp(['The estimated rho (1-4) are: ',num2str(rho')]);
 
 disp('Start RSS Metric Fusion Stage');

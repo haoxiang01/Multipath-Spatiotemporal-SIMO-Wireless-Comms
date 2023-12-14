@@ -1,14 +1,17 @@
 %...............................................
-% Author: Haoxiang Huang, MSc CSP, IC. 
-% Date: 09-Dec-2023.
-% This is the Task4 design for the ACT CW PartB
+% + Author: Haoxiang Huang, MSc CSP, IC. 
+% + Date: 09-Dec-2023.
+% + This is the Task2 RSS Localisation design for the ACT CW PartB
+% + Please execute this script in the directory: '..\PartB\'
+% + Please ensure to include the util package 'Wrappers'
+% + Ref: ACT-6 Slides P56-P60
 %...............................................
 
 clc;
 clear;
 close all;
 addpath('Wrappers\');
-addpath(['Data\rw1123\Task4\']);
+addpath('Data\hh923\Task4\');
 
 disp('................initialization................');
 disp('Load four locations for 4 Rx');

@@ -1,8 +1,11 @@
 %...............................................
-% Author: Haoxiang Huang, MSc CSP, IC. 
-% Date: 08-Dec-2023.
-% This is the Task1 design for the ACT CW PartB
+% + Author: Haoxiang Huang, MSc CSP, IC. 
+% + Date: 08-Dec-2023.
+% + This is the Task1 design for the ACT CW PartB
+% + Please execute this script in the directory: '..\PartB\'
+% + Please ensure to include the util package 'Wrappers'
 %...............................................
+
 clc;
 clear;
 close all;
@@ -30,14 +33,19 @@ disp('.......................................................');
 fprintf('\n');
 
 %%  TOA Localisation
+% Ref: ACT-6 Slides P23-P24
 t0 = 20 * Ts; % known the time of starting
 disp('..............Task-1a TOA Localisation................');
 disp('Start TOA Association Stage');
+%distance
 rho = zeros(4,1);
+
 [rho(1),t1] = fTOAAssociation(x1_Time,Ts,t0);
 [rho(2),t2] = fTOAAssociation(x2_Time,Ts,t0);
 [rho(3),t3] = fTOAAssociation(x3_Time,Ts,t0);
 [rho(4),t4] = fTOAAssociation(x4_Time,Ts,t0);
+TOA_est = [t1;t2;t3;t4];
+disp(['The estimated TOA (1-4) are: ',num2str(TOA_est')]);
 disp(['The estimated rho (1-4) are: ',num2str(rho')]);
 
 disp('Start TOA Metric Fusion Stage');
@@ -47,12 +55,10 @@ disp('...................................................');
 fprintf('\n');
 
 %%  TDOA Localisation
+% Ref: ACT-6 Slides P27-P30
 disp('..............Task-1b TDOA Localisation................');
 disp('Start TDOA Association Stage');
-rhoi1 = zeros(3,1);
-rhoi1(1) = (t2 - t1) * c;
-rhoi1(2) = (t3 - t1) * c;
-rhoi1(3) = (t4 - t1) * c;
+rhoi1 = fTDOAAssociation(TOA_est);
 
 disp('Start TDOA Metric Fusion Stage');
 r_m = fTDOAMetric(Rx,rhoi1);

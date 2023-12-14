@@ -13,8 +13,8 @@ function r_m= fDOAMetric(Rx,rho,DOAs)
     H = kron(ones(N,1),eye(2));
     r_m= inv(H'*H)*H'*b;
 
-    %plot
-    figure();
+    %%  Plot
+    figure;
     plot(Rx(:,1),Rx(:,2),'ob',...
          'MarkerSize',10,...
          'LineWidth',2,...
@@ -25,16 +25,13 @@ function r_m= fDOAMetric(Rx,rho,DOAs)
          'MarkerSize',10,...
          'LineWidth',2,...
          'MarkerFaceColor','r');
-    angles = 0:pi/40:2*pi;
-    for i = 1:size(rho,1)
-        x = rho(i)*cos(angles) + Rx(i,1);
-        y = rho(i)*sin(angles) + Rx(i,2);
-        plot(x,y,'-');
+    for i = 1:N
+        fc = @(x,y) (y-Rx(i,2)) - tan(DOAs(i)) * (x-Rx(i,1));
+        fimplicit(fc,[-150 150 -150 150]);
     end
     
     title('DOA Localisation');
     legend('Receivers','Transmitter');
     xlabel('x');ylabel('y');
     axis equal
-    hold off
 end
