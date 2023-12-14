@@ -115,7 +115,10 @@ x_n = fMainfoldExtender(Rx_symbols.', N_c);
 
 %% STAR Channel Estimation
 disp('Start STAR Channel Estimation');
+
+% Perform channel estimation
 [delay_estimate,DOA_estimate] = fChannelEstimation(x_n, Balanced_GoldSeq(:, 1), paths(1),cartesianArray);
+
 disp(['The estimated Photo-1 delay are : ',num2str(delay_estimate)]);
 disp(['The estimated Photo-1 DOAs (theta, phi) are : ',num2str(reshape(DOA_estimate',1,numel(DOA_estimate)))]);
 
