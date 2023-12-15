@@ -5,6 +5,8 @@
 % + Please execute this script in the directory: '..\PartB\'
 % + Please ensure to include the util package 'Wrappers'
 % + Ref: ACT-6 Slides P42-P47
+% + Please ensure to include the util package 'Wrappers' and 'Data' folder
+% + For more information, please see Readme.md file 
 %...............................................
 
 clc;

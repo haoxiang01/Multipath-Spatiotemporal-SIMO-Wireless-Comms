@@ -3,7 +3,8 @@
 % + Date: 08-Dec-2023.
 % + This is the Task1 design for the ACT CW PartB
 % + Please execute this script in the directory: '..\PartB\'
-% + Please ensure to include the util package 'Wrappers'
+% + Please ensure to include the util package 'Wrappers' and 'Data' folder
+% + For more information, please see Readme.md file 
 %...............................................
 
 clc;
