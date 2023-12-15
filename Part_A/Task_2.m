@@ -5,6 +5,7 @@
 % + Please execute this script in the directory: '..\PartA\'
 % + Please ensure to include the util package 'Wrappers'
 %   and 'Photos' folder
+% + For more information, please see Readme.md file 
 %...............................................
 
 clc;

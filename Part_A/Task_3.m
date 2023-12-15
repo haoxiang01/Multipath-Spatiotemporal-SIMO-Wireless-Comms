@@ -5,8 +5,10 @@
 % + Please execute this script in the directory: '..\PartA\'
 % + Please ensure to include the util package 'Wrappers'
 %   and 'Photos' folder
-% + Here, the Channel SNR is defaultly set to 0 dB. However, you can 
-%   manually adjust it to any desired value (e.g. 40 dB).
+% + In Task3, you need to enter your interested SNR values. 
+%   If you only care about the SNR = 0 situations, you can 
+%   enter any non-numeric values (like blank, enter…)
+% + For more information, please see Readme.md file 
 %...............................................
 
 clc;

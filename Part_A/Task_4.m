@@ -4,7 +4,8 @@
 % + This is the Task4 design for the ACT CW PartA
 % + Please execute this script in the directory: '..\PartA\'
 % + Please ensure to include the util package 'Wrappers'
-%   and 'Photos' folder
+%   and 'Data' folder
+% + For more information, please see Readme.md file 
 %...............................................
 
 clc;
